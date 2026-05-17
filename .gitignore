@@ -1,0 +1,53 @@
+# ===== Python =====
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ipynb_checkpoints/
+
+# ===== Virtual environments =====
+venv/
+.venv/
+env/
+ENV/
+
+# ===== PyCharm / IDE =====
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# ===== macOS =====
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# ===== Project-specific =====
+# Raw videos and processed frames — too large for git
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# Generated outputs (PDFs, visualizations)
+outputs/*
+!outputs/.gitkeep
+
+# Model weights — download separately
+*.pt
+*.pth
+*.onnx
+*.weights
+weights/
+
+# Jupyter notebook outputs (keep notebooks, ignore generated stuff)
+notebooks/*.html
+notebooks/*-checkpoint.ipynb
+
+# Logs
+*.log
+logs/
