@@ -167,7 +167,7 @@ def load_calibration(calibration_path):
 
 def top_down_positions(tracks_path, calibration_path):
     """
-    Converts per-frame bounding box positions from image space to top-downmstage coordinates using a
+    Converts per-frame bounding box positions from image space to top-down stage coordinates using a
     precomputed homography matrix.
 
     For each track entry, the footpoint (center of the bottom edge of the bounding box) is computed and transformed
