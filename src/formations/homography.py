@@ -165,6 +165,51 @@ def load_calibration(calibration_path):
 
     return H, stage_w, stage_h
 
+def top_down_positions(tracks_path, calibration_path):
+    """
+    Converts per-frame bounding box positions from image space to top-downmstage coordinates using a
+    precomputed homography matrix.
+
+    For each track entry, the footpoint (center of the bottom edge of the bounding box) is computed and transformed
+    using H. The footpoint represents where the dancer's feet touch the floor.
+
+    Args:
+        tracks_path: path to the tracks.json file
+        calibration_path: path to the calibration.json file produced by HomographyCalibrator
+
+    Returns:
+        A list of dicts, one per track entry.
+    """
+
+    with open(tracks_path, "r") as f:
+        tracks_data = json.load(f)
+
+    H, stage_w, stage_h = load_calibration(calibration_path)
+
+    #compute footpoints and transform
+    results = []
+    for entry in tracks_data["tracks"]:
+        x1, y1, x2, y2 = entry["bbox"]
+
+        # footpoint is calculated as the center of the bottom edge of the bounding box
+        foot_u = (x1 + x2) / 2.0
+        foot_v = float(y2)
+
+        point = np.array([[[foot_u, foot_v]]], dtype=np.float32)
+        transformed = cv2.perspectiveTransform(point, H)
+
+        stage_x = float(transformed[0][0][0])
+        stage_y = float(transformed[0][0][1])
+
+        results.append({
+            "frame":     entry["frame"],
+            "member_id": entry["member_id"],
+            "x":         round(stage_x, 3),
+            "y":         round(stage_y, 3),
+        })
+
+    return results
+
 if __name__ == "__main__":
     # resolve path relative to this file's location so it works from any directory
     project_root = Path(__file__).resolve().parents[2]
@@ -174,3 +219,5 @@ if __name__ == "__main__":
     calibrator.run(
         calibration_output_path=str(project_root / "data" / "processed" / "calibration.json")
     )
+
+
