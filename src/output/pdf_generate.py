@@ -31,7 +31,7 @@ def make_cover_page(title, formations):
              color="white", fontsize=14,
              ha="center", va="center")
 
-    # timestamp range if available
+    # timestamp range
     if formations and "start_time_s" in formations[0]:
         start = formations[0]["start_time_s"]
         end = formations[-1]["end_time_s"]
@@ -39,7 +39,7 @@ def make_cover_page(title, formations):
                  color="#aaaaaa", fontsize=11,
                  ha="center", va="center")
 
-    # date generated at bottom
+    # date at bottom
     today = datetime.date.today().strftime("%B %d, %Y")
     fig.text(0.5, 0.15, f"Generated {today}",
              color="#888888", fontsize=9,
@@ -48,7 +48,7 @@ def make_cover_page(title, formations):
     return fig
 
 def add_legend(fig, member_ids):
-    # figure out where to place the legend — top left corner, above the stage
+    # figure out where to place the legend
     # using figure coordinates (0 to 1)
     start_x = 0.04
     y = 0.91
