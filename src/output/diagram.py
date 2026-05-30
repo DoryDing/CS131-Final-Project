@@ -71,12 +71,9 @@ def draw_formation(formation, stage_w=100, stage_h=100):
     ax.set_title(
         f"Formation {formation['formation_id']}",
         fontsize=16, fontweight="bold", color="black",
-        pad=20, textcoords="axes fraction",
-        # underline trick: use a line below the title
+        pad=20
     )
     # draw underline manually under title
-    fig.canvas.draw()
-    title_y = 1.02
     ax.axhline(y=stage_h + 8, xmin=0.3, xmax=0.7, color="black", linewidth=1.5, clip_on=False)
 
     # axis settings
