@@ -10,8 +10,8 @@ def compute_motion_energy(top_down, min_members_for_energy=2):
     by_frame = {}
     # reshape  the top_down flat list into a nested dictionary
     for entry in top_down:
-        f = entry["frame"]
-        m = entry["member_id"]
+        f = int(entry["frame"])
+        m = int(entry["member_id"])
         if f not in by_frame:
             by_frame[f] = {}
         by_frame[f][m] = (entry["x"], entry["y"])

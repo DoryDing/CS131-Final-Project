@@ -202,8 +202,8 @@ def top_down_positions(tracks_path, calibration_path):
         stage_y = float(transformed[0][0][1])
 
         results.append({
-            "frame":     entry["frame"],
-            "member_id": entry["member_id"],
+            "frame":     int(entry["frame"]),
+            "member_id": int(entry["member_id"]),
             "x":         round(stage_x, 3),
             "y":         round(stage_y, 3),
         })
@@ -213,7 +213,7 @@ def top_down_positions(tracks_path, calibration_path):
 if __name__ == "__main__":
     # resolve path relative to this file's location so it works from any directory
     project_root = Path(__file__).resolve().parents[2]
-    video_path = project_root / "data" / "raw" / "playing_with_fire_short_test.mov"
+    video_path = project_root / "data" / "raw" / "test_playing_with_fire_short.mp4"
 
     calibrator = HomographyCalibrator(video_path=str(video_path))
     calibrator.run(

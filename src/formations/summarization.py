@@ -48,8 +48,8 @@ def summarize_all(top_down, segments):
     # re-index once
     by_frame = {}
     for entry in top_down:
-        f = entry["frame"]
-        m = entry["member_id"]
+        f = int(entry["frame"])
+        m = int(entry["member_id"])
         if f not in by_frame:
             by_frame[f] = {}
         by_frame[f][m] = (entry["x"], entry["y"])
