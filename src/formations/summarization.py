@@ -5,10 +5,37 @@ import json
 import numpy as np
 from pathlib import Path
 
+
+def recenter_formation(positions, stage_cx=50.0, stage_cy=50.0):
+    """Translate all member positions so their centroid sits at (stage_cx, stage_cy)."""
+    members = sorted(positions.keys())
+    pts = np.array([[positions[m]["x"], positions[m]["y"]] for m in members], dtype=float)
+    shift = np.array([stage_cx, stage_cy]) - pts.mean(axis=0)
+    pts += shift
+    return {m: {"x": round(float(pts[i, 0]), 3), "y": round(float(pts[i, 1]), 3)}
+            for i, m in enumerate(members)}
+
+
+def snap_to_grid(positions, grid=10, offset=0):
+    """
+    Snap each member's (x, y) to the nearest grid point.
+    """
+    def snap(v):
+        return round((v - offset) / grid) * grid + offset
+
+    return {m: {"x": snap(pos["x"]), "y": snap(pos["y"])}
+            for m, pos in positions.items()}
+
+
 def summarize_formation(by_frame, segment):
     start = segment["start_frame"]
     end = segment["end_frame"]
+    total = end - start + 1
 
+    #only use the middle 50% of each stable segment for the median
+    trim = total // 4
+    start = start + trim
+    end = end - trim
     # collect all (x, y) observations per member across the segment
     member_positions = {}
     for f in range(start, end + 1):
@@ -57,6 +84,8 @@ def summarize_all(top_down, segments):
     results = []
     for segment in segments:
         summary = summarize_formation(by_frame, segment)
+        summary["positions"] = recenter_formation(summary["positions"])
+        summary["positions"] = snap_to_grid(summary["positions"])
         results.append(summary)
 
     return results

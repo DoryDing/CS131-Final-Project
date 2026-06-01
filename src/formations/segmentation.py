@@ -4,7 +4,36 @@ import numpy as np
 from pathlib import Path
 from typing import Optional
 
-def compute_motion_energy(top_down, min_members_for_energy=2):
+def smooth_positions(by_frame, window=5):
+    """
+    For each member, replace their raw (x, y) at each frame with the median
+    of their positions over a sliding window of size `window` (centered).
+    This suppresses YOLO bbox jitter: a dancer standing still has slightly
+    different detected bbox each frame, producing small but nonzero x/y
+    fluctuations. The median over ~5 frames collapses that noise to near-zero
+    so the motion energy signal only picks up real movement.
+    """
+    half = window // 2
+    frames = sorted(by_frame.keys())
+    frame_index = {f: i for i, f in enumerate(frames)}
+
+    smoothed = {}
+    for i, f in enumerate(frames):
+        smoothed[f] = {}
+        for m in by_frame[f]:
+            # collect this member's positions over the window
+            xs, ys = [], []
+            for j in range(i - half, i + half + 1):
+                if j < 0 or j >= len(frames):
+                    continue
+                nf = frames[j]
+                if m in by_frame[nf]:
+                    xs.append(by_frame[nf][m][0])
+                    ys.append(by_frame[nf][m][1])
+            smoothed[f][m] = (float(np.median(xs)), float(np.median(ys)))
+    return smoothed
+
+def compute_motion_energy(top_down, min_members_for_energy=2, smooth_window=5):
     # reorganize the flat list into {frame: {member_id: (x, y)}}
     # so its easier to look up positions by frame
     by_frame = {}
@@ -15,6 +44,9 @@ def compute_motion_energy(top_down, min_members_for_energy=2):
         if f not in by_frame:
             by_frame[f] = {}
         by_frame[f][m] = (entry["x"], entry["y"])
+
+    # smooth each member's x/y over a small window to suppress bbox jitter
+    by_frame = smooth_positions(by_frame, window=smooth_window)
 
     frames = sorted(by_frame.keys())
     energy = {}

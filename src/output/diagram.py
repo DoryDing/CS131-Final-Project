@@ -76,6 +76,17 @@ def draw_formation(formation, stage_w=100, stage_h=100):
     # draw underline manually under title
     ax.axhline(y=stage_h + 8, xmin=0.3, xmax=0.7, color="black", linewidth=1.5, clip_on=False)
 
+    # frame range + timestamp — placed below the AUDIENCE label
+    start_f = formation.get("start_frame", "?")
+    end_f   = formation.get("end_frame",   "?")
+    frame_str = f"frames {start_f} – {end_f}"
+    if "start_time_s" in formation:
+        frame_str += f"  ({formation['start_time_s']}s – {formation['end_time_s']}s)"
+    ax.text(cx, stage_h + 12, frame_str,
+            color="#888888", fontsize=7,
+            ha="center", va="center",
+            clip_on=False)
+
     # axis settings
     ax.set_xlim(-8, stage_w + 8)
     ax.set_ylim(-8, stage_h + 8)

@@ -5,6 +5,7 @@ from pathlib import Path
 from src.formations.homography import top_down_positions
 from src.formations.segmentation import run_segmentation
 from src.formations.summarization import summarize_all
+
 from src.output.pdf_generate import build_pdf
 
 
