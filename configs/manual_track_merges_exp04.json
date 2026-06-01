@@ -1,0 +1,155 @@
+{
+  "members": [1, 2, 3, 4],
+  "member_legend": {
+    "1": "red_hair",
+    "2": "white_shoes",
+    "3": "black_hair",
+    "4": "jean"
+  },
+  "ranges": [
+    {
+      "member_id": 1,
+      "track_id": 1,
+      "start_frame": 0,
+      "end_frame": 4553
+    },
+    {
+      "member_id": 1,
+      "track_id": 5,
+      "start_frame": 0,
+      "end_frame": 4553
+    },
+    {
+      "member_id": 1,
+      "track_id": 11,
+      "start_frame": 0,
+      "end_frame": 4553
+    },
+    {
+      "member_id": 1,
+      "track_id": 16,
+      "start_frame": 0,
+      "end_frame": 4553
+    },
+
+    {
+      "member_id": 3,
+      "track_id": 3,
+      "start_frame": 0,
+      "end_frame": 4553
+    },
+    {
+      "member_id": 3,
+      "track_id": 8,
+      "start_frame": 0,
+      "end_frame": 4553
+    },
+    {
+      "member_id": 3,
+      "track_id": 14,
+      "start_frame": 0,
+      "end_frame": 4553
+    },
+    {
+      "member_id": 3,
+      "track_id": 12,
+      "start_frame": 0,
+      "end_frame": 4553
+    },
+
+    {
+      "member_id": 2,
+      "track_id": 7,
+      "start_frame": 0,
+      "end_frame": 4553
+    },
+    {
+      "member_id": 2,
+      "track_id": 10,
+      "start_frame": 0,
+      "end_frame": 4553
+    },
+    {
+      "member_id": 2,
+      "track_id": 15,
+      "start_frame": 0,
+      "end_frame": 4553
+    },
+    {
+      "member_id": 2,
+      "track_id": 18,
+      "start_frame": 0,
+      "end_frame": 4553
+    },
+
+    {
+      "member_id": 4,
+      "track_id": 4,
+      "start_frame": 0,
+      "end_frame": 4553
+    },
+    {
+      "member_id": 4,
+      "track_id": 9,
+      "start_frame": 0,
+      "end_frame": 4553
+    },
+    {
+      "member_id": 4,
+      "track_id": 13,
+      "start_frame": 0,
+      "end_frame": 4553
+    },
+    {
+      "member_id": 4,
+      "track_id": 17,
+      "start_frame": 0,
+      "end_frame": 4553
+    },
+    {
+      "member_id": 4,
+      "track_id": 20,
+      "start_frame": 0,
+      "end_frame": 4553
+    },
+
+    {
+      "member_id": 2,
+      "track_id": 2,
+      "start_frame": 0,
+      "end_frame": 1609
+    },
+    {
+      "member_id": 4,
+      "track_id": 2,
+      "start_frame": 1610,
+      "end_frame": 4553
+    },
+
+    {
+      "member_id": 2,
+      "track_id": 6,
+      "start_frame": 1606,
+      "end_frame": 4553
+    },
+    {
+      "member_id": 4,
+      "track_id": 6,
+      "start_frame": 0,
+      "end_frame": 1605
+    },
+
+    {
+      "member_id": 1,
+      "track_id": 19,
+      "start_frame": 0,
+      "end_frame": 3330
+    },
+    {
+      "member_id": 4,
+      "track_id": 19,
+      "start_frame": 3331,
+      "end_frame": 4553
+    }
+  ]
+}

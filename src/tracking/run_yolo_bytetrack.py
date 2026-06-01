@@ -1,4 +1,5 @@
 from ultralytics import YOLO
+import argparse
 import cv2
 import json
 from pathlib import Path
@@ -9,11 +10,63 @@ OUTPUT_PATH = "outputs/tracks/tracks_anonymous.json"
 
 
 def main():
+    parser = argparse.ArgumentParser(description="Run YOLOv8 + ByteTrack on a video.")
+
+    parser.add_argument(
+        "--model",
+        type=str,
+        default="yolov8n.pt",
+        help="YOLO model weights, e.g. yolov8n.pt or yolov8s.pt."
+    )
+
+    parser.add_argument(
+        "--output",
+        type=str,
+        default=OUTPUT_PATH,
+        help="Path to save tracking JSON."
+    )
+
+    parser.add_argument(
+        "--experiment-name",
+        type=str,
+        default=None,
+        help="Optional experiment name. If provided, saves output under outputs/experiments/<experiment-name>/."
+    )
+
+    parser.add_argument(
+        "--conf",
+        type=float,
+        default=None,
+        help="Optional YOLO confidence threshold."
+    )
+
+    parser.add_argument(
+        "--imgsz",
+        type=int,
+        default=None,
+        help="Optional YOLO inference image size."
+    )
+
+    parser.add_argument(
+        "--tracker",
+        type=str,
+        default="bytetrack.yaml",
+        help="Tracker config path, e.g. bytetrack.yaml or configs/bytetrack_buffer90.yaml."
+    )
+
+    args = parser.parse_args()
+
     video_path = Path(VIDEO_PATH)
-    output_path = Path(OUTPUT_PATH)
+
+    # Preserve original behavior unless --experiment-name is provided.
+    if args.experiment_name is not None:
+        output_path = Path("outputs") / "experiments" / args.experiment_name / "tracks_anonymous.json"
+    else:
+        output_path = Path(args.output)
+
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
-    model = YOLO("yolov8n.pt")
+    model = YOLO(args.model)
 
     cap = cv2.VideoCapture(str(video_path))
 
@@ -29,14 +82,23 @@ def main():
 
     tracks = []
 
-    results = model.track(
-        source=str(video_path),
-        classes=[0],          # person only
-        tracker="bytetrack.yaml",
-        persist=True,
-        stream=True,
-        verbose=False
-    )
+    track_kwargs = {
+        "source": str(video_path),
+        "classes": [0],          # person only
+        "tracker": args.tracker,
+        "persist": True,
+        "stream": True,
+        "verbose": False
+    }
+
+    # These are optional. If not provided, original model.track(...) behavior is preserved.
+    if args.conf is not None:
+        track_kwargs["conf"] = args.conf
+
+    if args.imgsz is not None:
+        track_kwargs["imgsz"] = args.imgsz
+
+    results = model.track(**track_kwargs)
 
     for frame_idx, result in enumerate(results):
         boxes = result.boxes
@@ -58,6 +120,13 @@ def main():
             })
 
     output = {
+        "experiment": {
+            "name": args.experiment_name,
+            "model": args.model,
+            "conf": args.conf,
+            "imgsz": args.imgsz,
+            "tracker": args.tracker
+        },
         "video": {
             "path": str(video_path),
             "fps": fps,

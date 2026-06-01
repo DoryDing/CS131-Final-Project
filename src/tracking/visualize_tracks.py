@@ -1,3 +1,4 @@
+import argparse
 import cv2
 import json
 from pathlib import Path
@@ -9,7 +10,40 @@ OUTPUT_VIDEO_PATH = "outputs/debug/tracking_debug.mp4"
 
 
 def main():
-    with open(TRACKS_PATH, "r") as f:
+    parser = argparse.ArgumentParser(description="Visualize tracking IDs on video.")
+
+    parser.add_argument(
+        "--tracks",
+        type=str,
+        default=TRACKS_PATH,
+        help="Path to tracks JSON."
+    )
+
+    parser.add_argument(
+        "--output",
+        type=str,
+        default=OUTPUT_VIDEO_PATH,
+        help="Path to save tracking debug video."
+    )
+
+    parser.add_argument(
+        "--experiment-name",
+        type=str,
+        default=None,
+        help="Optional experiment name. If provided, reads/writes under outputs/experiments/<experiment-name>/."
+    )
+
+    args = parser.parse_args()
+
+    # Preserve original behavior unless --experiment-name is provided.
+    if args.experiment_name is not None:
+        tracks_path = Path("outputs") / "experiments" / args.experiment_name / "tracks_anonymous.json"
+        output_video_path = Path("outputs") / "experiments" / args.experiment_name / "tracking_debug.mp4"
+    else:
+        tracks_path = Path(args.tracks)
+        output_video_path = Path(args.output)
+
+    with open(tracks_path, "r") as f:
         data = json.load(f)
 
     tracks_by_frame = {}
@@ -24,11 +58,10 @@ def main():
     width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
     height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
-    output_path = Path(OUTPUT_VIDEO_PATH)
-    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_video_path.parent.mkdir(parents=True, exist_ok=True)
 
     fourcc = cv2.VideoWriter_fourcc(*"mp4v")
-    writer = cv2.VideoWriter(str(output_path), fourcc, fps, (width, height))
+    writer = cv2.VideoWriter(str(output_video_path), fourcc, fps, (width, height))
 
     frame_idx = 0
 
@@ -59,7 +92,8 @@ def main():
     cap.release()
     writer.release()
 
-    print(f"Saved tracking debug video to {output_path}")
+    print(f"Read tracks from {tracks_path}")
+    print(f"Saved tracking debug video to {output_video_path}")
 
 
 if __name__ == "__main__":

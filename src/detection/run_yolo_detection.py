@@ -17,7 +17,7 @@ def main():
     output_path = Path(OUTPUT_PATH)
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
-    model = YOLO("yolov8n.pt")  # small and fast; good for first test
+    model = YOLO("yolov8n.pt") 
 
     cap = cv2.VideoCapture(str(video_path))
 

@@ -1,0 +1,26 @@
+# Custom ByteTrack config for CS131 K-pop dancer tracking.
+# Goal: reduce ID fragmentation when dancers temporarily disappear due to occlusion.
+
+tracker_type: bytetrack
+
+# Detection confidence thresholds.
+# High threshold: detections above this are used as reliable detections.
+track_high_thresh: 0.5
+
+# Low threshold: detections between low and high can still help recover tracks.
+track_low_thresh: 0.1
+
+# Threshold for starting a new track.
+# Higher = less likely to create many new short IDs.
+new_track_thresh: 0.6
+
+# How many frames to keep a lost track alive.
+# Since the video is 60 FPS, 90 frames = 1.5 seconds.
+track_buffer: 90
+
+# Matching threshold for associating detections to existing tracks.
+# Slightly lower can make matching more permissive.
+match_thresh: 0.75
+
+# Fuse detection confidence with IoU distance.
+fuse_score: true
